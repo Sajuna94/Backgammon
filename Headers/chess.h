@@ -9,8 +9,7 @@
 typedef enum { EMPTY, BLACK, WHITE, BANNED } Cell;
 
 typedef struct {
-    int x;
-    int y;
+    int x, y;
     Cell player;
 } Coordinate;
 
@@ -24,6 +23,6 @@ typedef struct
 
 void displayChess(Chess* chess);
 
-bool putCell(Chess* chess, int x, int y);
+bool putCell(Chess* chess, int x, int y, Cell cell);
 
 #endif /* CHESS_H */
