@@ -23,6 +23,8 @@ typedef struct
 
 void displayChess(Chess* chess);
 
+Chess* newChess();
+
 bool putCell(Chess* chess, int x, int y, Cell cell);
 
 #endif /* CHESS_H */

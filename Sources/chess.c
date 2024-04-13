@@ -16,6 +16,20 @@ void displayChess(Chess* chess) {
     }
 };
 
+Chess* newChess() {
+    Chess *chess = (Chess*)malloc(sizeof(Chess));
+
+    for (int y = 0; y < BOARD_SIZE; y++)
+        for (int x = 0; x < BOARD_SIZE; x++)
+        {
+            chess->board[y][x] = EMPTY;
+        }
+    chess->cord = NULL;
+    chess->size = 0;
+
+    return chess;
+}
+
 bool putCell(Chess* chess, int x, int y, Cell cell) {
     if (cell == BLACK && chess->board[y][x] == BANNED)
         return false;

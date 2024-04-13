@@ -1,6 +1,8 @@
 #include "../Headers/ban.h"
 #include "../module/point.h"
 
+// 沒想法 看不懂禁點 :)
+
 // L-R, U-D, LU-RD, RU-LD
 const int dx[] = { -1, 1,   0,  0,   -1,  1,    1, -1  };
 const int dy[] = {  0, 0,   1, -1,   -1,  1,   -1,  1  };

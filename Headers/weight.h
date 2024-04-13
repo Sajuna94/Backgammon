@@ -11,8 +11,10 @@ typedef struct
 
 int calculateWeight(Chess* chess, int x, int y);
 
-WeightedPoint* getWeightPoints(Chess* chess);
+WeightedPoint* getWeightPoints(Chess* chess, int* length);
 
 void displayWeight(WeightedPoint *weightPoints, int pointsLength);
+
+
 
 #endif /* WEIGHT_H */

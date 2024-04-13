@@ -1,5 +1,8 @@
 {
     "code-runner.executorMap": {
         "c": "cd $dir && gcc -o $fileNameWithoutExt *.c && start cmd \"/k $fileNameWithoutExt & pause & exit\""
+    },
+    "files.associations": {
+        "game.h": "c"
     }
 }
