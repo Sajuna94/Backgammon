@@ -5,13 +5,8 @@ typedef struct {
     int X, Y;
 } Point;
 
-Point newPoint(int x, int y) {
-    Point point;
+Point newPoint(int x, int y);
 
-    point.X = x;
-    point.Y = y;
-    
-    return point;
-};
+Point addPoint(Point pointA, Point pointB);
 
 #endif /* POINT_H */

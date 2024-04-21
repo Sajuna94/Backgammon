@@ -2,7 +2,7 @@
 #define GAME_H
 
 #include "chess.h"
-#include "weight.h"
+#include "ban.h"
 
 typedef struct
 {

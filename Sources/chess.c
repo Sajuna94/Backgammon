@@ -1,5 +1,6 @@
 #include "../Headers/chess.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 void displayChess(Chess* chess) {
     for (int y = 0; y < BOARD_SIZE; y++) {
@@ -30,20 +31,24 @@ Chess* newChess() {
     return chess;
 }
 
-bool putCell(Chess* chess, int x, int y, Cell cell) {
-    if (cell == BLACK && chess->board[y][x] == BANNED)
+bool putCell(Chess* chess, Point point, Cell cell) {
+    if (cell == BLACK && chess->board[point.Y][point.X] == BANNED)
         return false;
-    
     // update cord
     if (cell == BLACK || cell == WHITE) {
-        chess->cord[chess->size].x = x;
-        chess->cord[chess->size].y = y;
+        chess->cord = (Coordinate*)realloc(chess->cord, (chess->size + 1) * sizeof(Coordinate));
+        chess->cord[chess->size].x = point.X;
+        chess->cord[chess->size].y = point.Y;
         chess->cord[chess->size].player = cell;
         chess->size++;
     }
 
     // put cell
-    chess->board[y][x] = cell;
+    chess->board[point.Y][point.X] = cell;
 
     return true;
+}
+
+bool checkWin(Chess* chess, Point point, Cell Player) {
+    return false;
 }
