@@ -1,12 +1,11 @@
 #ifndef POINT_H
 #define POINT_H
 
-typedef struct {
+typedef struct Point
+{
     int X, Y;
 } Point;
 
 Point newPoint(int x, int y);
 
-Point addPoint(Point pointA, Point pointB);
-
-#endif /* POINT_H */
+#endif

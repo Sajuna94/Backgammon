@@ -1,19 +1,28 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "chess.h"
-#include "ban.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
 
-typedef struct
+#include "../Tools/point.h"
+#include "chess.h"
+
+typedef struct {
+    int x, y;
+    int player;
+} Coordinate;
+
+typedef struct Game
 {
-    Chess* chess;
-    Cell ME, ENEMY;
+    Coordinate *cord;
+    int size;
+
+    Piece me, enemy;
+    Chess chess;
 } Game;
 
-Game* newGame(Cell me, Cell enemy);
+Game* newGame(Piece myPiece, Piece enemyPiece);
+Piece startGame(Game* game);
 
-void startGame(Game* game);
-
-void endGame(Game* game);
-
-#endif /* GAME_H */
+#endif

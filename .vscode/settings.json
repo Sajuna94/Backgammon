@@ -8,6 +8,4 @@
         "chess.h": "c",
         "stdlib.h": "c"
     }
-    // "c": "cd $dir ; gcc -o $fileNameWithoutExt *.c ; start cmd \"/k $fileNameWithoutExt & pause & exit\""
-
 }

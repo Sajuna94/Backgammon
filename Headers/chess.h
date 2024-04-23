@@ -1,37 +1,31 @@
 #ifndef CHESS_H
 #define CHESS_H
 
-#include "../module/point.h"
-#include <stdbool.h>
-
 #define BOARD_SIZE 15
 
-// L-R, U-D, LU-RD, RU-LD
+typedef enum { EMPTY = 2, BLACK = 0, WHITE = 1, BAN = 3 } Piece;
+
 static const int dx[] = { -1, 1,   0,  0,   -1,  1,    1, -1  };
 static const int dy[] = {  0, 0,   1, -1,   -1,  1,   -1,  1  };
 
-// 定義棋盤格子狀態
-typedef enum { EMPTY, BLACK, WHITE, BANNED } Cell;
-
-typedef struct {
-    int x, y;
-    Cell player;
-} Coordinate;
-
-typedef struct
+typedef struct Chess
 {
-    Coordinate *cord;
-    int size;
+    Piece board[BOARD_SIZE][BOARD_SIZE];
 
-    Cell board[BOARD_SIZE][BOARD_SIZE];
+    int distanceMaps[2][BOARD_SIZE][BOARD_SIZE];
 } Chess;
+
 
 void displayChess(Chess* chess);
 
-Chess* newChess();
+void displayDistance(Chess* chess, Piece piece);
 
-bool putCell(Chess* chess, Point point, Cell cell);
+Chess newChess();
 
-bool checkWin(Chess* chess, Point point, Cell Player);
+void setChessPiece(Chess* chess, Piece piece, Point position);
 
-#endif /* CHESS_H */
+bool checkWin(Chess* chess, Piece piece, Point position);
+
+bool isSafe(int x, int y);
+
+#endif

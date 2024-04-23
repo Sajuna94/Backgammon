@@ -1,14 +1,14 @@
-#include <stdio.h>
 #include "../Headers/game.h"
 
-int main() {
-    Cell me = BLACK, enemy = WHITE;
+int main(void) {
+    Game* game = newGame(BLACK, WHITE);
+    Chess* chess = &game->chess;
+    setChessPiece(&game->chess, BLACK, newPoint(0, 0));
 
-    Game *game = newGame(me, enemy);
-    startGame(game);
+    Piece winner = startGame(game);
+
+    
+    displayChess(&game->chess);
+    printf("=====================================\n");
+    displayDistance(chess, BLACK);
 }
-
-// gcc -o main Sources/ban.c Sources/chess.c Sources/game.c Sources/weight.c
-
-// "c": "cd $dir ; gcc -o $fileNameWithoutExt *.c ; start cmd \"/k $fileNameWithoutExt & pause & exit\""
-// gcc *.c -o main ; Start-Process -FilePath "cmd" -ArgumentList "/k .\main & pause & exit"

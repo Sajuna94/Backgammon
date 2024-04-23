@@ -1,74 +1,77 @@
-#include <stdlib.h>
-#include <stdio.h>
 #include "../Headers/game.h"
 
-Game* newGame(Cell me, Cell enemy) {
+Game* newGame(Piece myPiece, Piece enemyPiece) {
     Game* game = (Game*)malloc(sizeof(Game));
 
+    game->me = myPiece;
+    game->enemy = enemyPiece;
+
     game->chess = newChess();
-    game->ME = me;
-    game->ENEMY = enemy;
+    game->cord = NULL;
+    game->size = 0;
 
     return game;
 }
 
-void swapPlayer(Cell *player) {
-    if (*player == BLACK)
-        *player = WHITE;
-    else
-        *player = BLACK;
+void swapPlayer(Piece* player) {
+    *player = (*player == BLACK) ? WHITE : BLACK;
 }
 
-void startGame(Game* game) {
+bool tryPutPiece(Game* game, Piece player, Point position) {
+    Chess* chess = &game->chess;
+
+    if (player == BLACK && chess->board[position.Y][position.X] == BAN)
+        return false;
     
-    Cell currentPlayer = BLACK;
-        displayChess(game->chess);
-    
-    int count = 0;
-    while (count < 50)
+    setChessPiece(chess, player, position);   
+
+    // TODO: update weight
+    // TODO: update banned 
+
+    // update cord
+    game->cord = realloc(game->cord, (game->size + 1) * sizeof(Coordinate));
+    game->cord[game->size].x = position.X;
+    game->cord[game->size].y = position.Y;
+    game->cord[game->size].player = player;
+    game->size++;
+
+    return true;
+}
+
+Point getNextMove(Game* game) {
+    // TODO: 取得下棋位置
+    return newPoint(rand() % BOARD_SIZE, rand() % BOARD_SIZE);
+}
+
+Piece startGame(Game* game) {
+    int maxMoves = BOARD_SIZE * BOARD_SIZE, moveCount = 0;
+
+    Piece currentPlayer = BLACK;
+
+    while (moveCount < maxMoves)
     {
-        // 棋子落點
-        Point currentPoint;
+        Point move = newPoint(0, 0); // 要下棋的位置
 
-        // 取得棋子落點
-        if (currentPlayer == game->ENEMY) {
-            // TODO: 取得敵方落點
-            // currentPoint = 敵方落點();
-            currentPoint = newPoint(rand() % BOARD_SIZE, rand() % BOARD_SIZE);
+        if (currentPlayer == game->enemy) {
+            // TODO: 取得對方下棋位置
+            move = newPoint(rand() % BOARD_SIZE, rand() % BOARD_SIZE);
         }
-        else if (currentPlayer == game->ME) {
-            // TODO: 計算我方落點
-            // currentPoint = 我的落點();
-            currentPoint = newPoint(rand() % BOARD_SIZE, rand() % BOARD_SIZE);
+        else if (currentPlayer == game->me) {
+            move = getNextMove(game);
         }
-        // 下棋
-        
-        // (1) 下棋
-        if (!putCell(game->chess, currentPoint, currentPlayer)) {
+
+        if (!tryPutPiece(game, currentPlayer, move)) {
             // TODO: 下棋失敗處理 (可能不用做)
+            continue;
         }
 
-        // (2) 更新禁點
-        // updateBanned(game->chess);
-
-        // (3) 判定勝方
-        if (checkWin(game->chess, currentPoint, currentPlayer)) {
-            // TODO: 某方獲勝的事件處理 (好像是不用做啦)
-            break;
+        if (checkWin(&game->chess, currentPlayer, move)) {
+            return currentPlayer;
         }
 
-        // 輪到下一個玩家
         swapPlayer(&currentPlayer);
-
-        // test print
-        count++;
-        displayChess(game->chess);
-        printf("===================================\n");
+        moveCount++;
     }
-}
 
-void endGame(Game* game) {
-    // free
-    free(game->chess);
-    free(game);
+    return EMPTY;
 }
