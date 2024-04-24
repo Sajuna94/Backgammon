@@ -78,8 +78,9 @@ void updateDistance(Chess* chess, Piece piece) {
 bool checkWin(Chess* chess, Piece piece, Point position) {
     Piece currentPiece = chess->board[position.Y][position.X];
     
-    if (chess->distanceMaps[currentPiece][position.Y][position.X] >= 4)
+    if (chess->distanceMaps[piece][position.Y][position.X] >= 4) {
         return true;
+    }
     return false;
 }
 
@@ -87,6 +88,6 @@ void setChessPiece(Chess* chess, Piece piece, Point position) {
     chess->board[position.Y][position.X] = piece;
 
 
-    chess->distanceMaps[piece][position.Y][position.X] = 0; // 可以不用清0
+    // chess->distanceMaps[piece][position.Y][position.X] = 0; // 可以不用清0
     updateDistance(chess, piece);
 }

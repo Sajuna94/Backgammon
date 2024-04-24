@@ -20,6 +20,8 @@ void swapPlayer(Piece* player) {
 bool tryPutPiece(Game* game, Piece player, Point position) {
     Chess* chess = &game->chess;
 
+    if (chess->board[position.Y][position.X] == BLACK || chess->board[position.Y][position.X] == WHITE)
+        return false;
     if (player == BLACK && chess->board[position.Y][position.X] == BAN)
         return false;
     
@@ -45,7 +47,7 @@ Point getNextMove(Game* game) {
 
 Piece startGame(Game* game) {
     srand(time(NULL));
-    int maxMoves = BOARD_SIZE * BOARD_SIZE, moveCount = 0;
+    int maxMoves = BOARD_SIZE * BOARD_SIZE - 40, moveCount = 0;
 
     Piece currentPlayer = BLACK;
 
@@ -55,7 +57,7 @@ Piece startGame(Game* game) {
 
         if (currentPlayer == game->enemy) {
             // TODO: 取得對方下棋位置
-            // move = newPoint(rand() % BOARD_SIZE, rand() % BOARD_SIZE);
+            move = newPoint(rand() % BOARD_SIZE, rand() % BOARD_SIZE);
         }
         else if (currentPlayer == game->me) {
             move = getNextMove(game);
@@ -66,9 +68,10 @@ Piece startGame(Game* game) {
             continue;
         }
 
-        // if (checkWin(&game->chess, currentPlayer, move)) {
-        //     return currentPlayer;
-        // }
+        if (checkWin(&game->chess, currentPlayer, move)) {
+            printf("\n(%d, %d)\n", move.X, move.Y);
+            return currentPlayer;
+        }
 
         swapPlayer(&currentPlayer);
         moveCount++;

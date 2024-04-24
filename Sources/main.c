@@ -6,9 +6,10 @@ int main(void) {
     setChessPiece(&game->chess, BLACK, newPoint(0, 0));
 
     Piece winner = startGame(game);
-
     
     displayChess(&game->chess);
     printf("=====================================\n");
     displayDistance(chess, BLACK);
+
+    printf("\nWINNER: %d\n", winner);
 }
