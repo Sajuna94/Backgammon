@@ -69,7 +69,8 @@ Piece startGame(Game* game) {
         }
 
         if (checkWin(&game->chess, currentPlayer, move)) {
-            printf("\n(%d, %d)\n", move.X, move.Y);
+            displayChess(&game->chess);
+            printf("\n(%d, %d) Winner is: %s\n", move.X, move.Y, (currentPlayer == BLACK) ? "BlACK(X)":"WHITE(O)");
             return currentPlayer;
         }
 
@@ -78,4 +79,8 @@ Piece startGame(Game* game) {
     }
 
     return EMPTY;
+}
+
+void endGame(Game* game) {
+    free(game);
 }

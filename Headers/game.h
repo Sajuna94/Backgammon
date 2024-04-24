@@ -25,5 +25,6 @@ typedef struct Game
 
 Game* newGame(Piece myPiece, Piece enemyPiece);
 Piece startGame(Game* game);
+void endGame(Game* game);
 
 #endif

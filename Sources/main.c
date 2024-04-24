@@ -7,9 +7,9 @@ int main(void) {
 
     Piece winner = startGame(game);
     
-    displayChess(&game->chess);
-    printf("=====================================\n");
-    displayDistance(chess, BLACK);
+    // displayChess(&game->chess);
+    // printf("=====================================\n");
+    // displayDistance(chess, BLACK);
 
-    printf("\nWINNER: %d\n", winner);
+    // printf("\nWINNER: %d\n", winner);
 }
