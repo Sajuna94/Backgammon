@@ -72,7 +72,7 @@ void updateDistance(Chess* chess, Piece piece) {
                 continue;
             chess->distanceMaps[piece][y][x] = calcDistance(chess, piece, x, y);
         }
-}
+} 
  
 
 bool checkWin(Chess* chess, Piece piece, Point position) {
