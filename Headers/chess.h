@@ -5,8 +5,15 @@
 
 typedef enum { EMPTY = 2, BLACK = 0, WHITE = 1, BAN = 3 } Piece;
 
-static const int dx[] = { -1, 1,   0,  0,   -1,  1,    1, -1  };
-static const int dy[] = {  0, 0,   1, -1,   -1,  1,   -1,  1  };
+static const int dirX[] = { -1, 1,   0,  0,   -1,  1,    1, -1  };
+static const int dirY[] = {  0, 0,   1, -1,   -1,  1,   -1,  1  };
+
+static const Point dirPts[8] = {
+    {-1, 0}, {1, 0},
+    {0, 1}, {0, -1},
+    {-1, -1}, {1, 1},
+    {1, -1}, {-1, 1}  
+};
 
 typedef struct Chess
 {

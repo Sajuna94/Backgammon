@@ -22,8 +22,8 @@ Chess newChess() {
     for (int y = 0; y < BOARD_SIZE; y++)
         for (int x = 0; x < BOARD_SIZE; x++) {
             chess.board[y][x] = EMPTY;
-            chess.distanceMaps[BLACK][y][x] = 5;
-            chess.distanceMaps[WHITE][y][x] = 5;
+            chess.distanceMaps[BLACK][y][x] = 0;
+            chess.distanceMaps[WHITE][y][x] = 0;
         }
     return chess;
 }
@@ -44,43 +44,41 @@ bool isSafe(int x, int y) {
 }
 
 int countPieceLength(Chess* chess, Piece piece, Point dirPt, int x, int y) {
-    // if (!isSafe(x, y))
-    //     return 0;
-    // if (chess->board[y][x] != piece)
-    //     return 0;
-    
-    // return countPieceLength(chess, piece, dirPt, x + dirPt.X, y + dirPt.Y) + 1;
+    if (!isSafe(x, y))
+        return 0;
+    if (chess->board[y][x] != piece)
+        return 0;
+    return 1 + countPieceLength(chess, piece, dirPt, x + dirPt.X, y + dirPt.Y);
 }
 
-int calcDistance(Chess* chess, Piece piece, Point position) {
-    // int maxTotal = 0;
-    // for (int i = 0; i < 4; i++) {
-    //     Point dirPtLeft = newPoint(dx[(i * 2)], dy[(i * 2)]);
-    //     Point dirPtRight = newPoint(dx[(i * 2) + 1], dy[(i * 2) + 1]);
+int calcDistance(Chess* chess, Piece piece, int x, int y) {
+    int maxTotal = 0;
+    for (int i = 0; i < 8; i += 2) {
+        Point dirPtL = dirPts[i], dirPtR = dirPts[i + 1];
 
-    //     int total = 
-    //         countPieceLength(chess, piece, dirPtLeft, position.X + dirPtLeft.X, position.Y + dirPtLeft.Y) +
-    //         countPieceLength(chess, piece, dirPtRight, position.X + dirPtRight.X, position.Y + dirPtRight.Y);
-    //     printf("%d\n", total);
-    //     maxTotal = ((total) > maxTotal) ? (total) : maxTotal;
-    // }
-    // return maxTotal;
+        int total =
+            countPieceLength(chess, piece, dirPtL, x + dirPtL.X, y + dirPtL.Y) +
+            countPieceLength(chess, piece, dirPtR, x + dirPtR.X, y + dirPtR.Y);
+
+        maxTotal = (total > maxTotal) ? total : maxTotal;
+    }
+    return maxTotal;
 }
 
-void updateDistance(Chess* chess, Piece piece, Point position) {
-    // for (int y = 0; y < BOARD_SIZE; y++) {
-    //     for (int x = 0; x < BOARD_SIZE; x++) {
-    //         if (chess->board[y][x] != EMPTY)
-    //             continue;
-    //         chess->distanceMaps[piece][position.Y][position.X] = calcDistance(chess, piece, newPoint(position.X, position.Y));
-    //     }
-    // }
+void updateDistance(Chess* chess, Piece piece) {
+    for (int y = 0; y < BOARD_SIZE; y++)
+        for (int x = 0; x < BOARD_SIZE; x++) {
+            if (chess->board[y][x] != EMPTY)
+                continue;
+            chess->distanceMaps[piece][y][x] = calcDistance(chess, piece, x, y);
+        }
 }
+ 
 
 bool checkWin(Chess* chess, Piece piece, Point position) {
     Piece currentPiece = chess->board[position.Y][position.X];
     
-    if (chess->distanceMaps[currentPiece][position.Y][position.X] == 1)
+    if (chess->distanceMaps[currentPiece][position.Y][position.X] >= 4)
         return true;
     return false;
 }
@@ -88,5 +86,7 @@ bool checkWin(Chess* chess, Piece piece, Point position) {
 void setChessPiece(Chess* chess, Piece piece, Point position) {
     chess->board[position.Y][position.X] = piece;
 
-    // updateDistance(chess, piece, position);
+
+    chess->distanceMaps[piece][position.Y][position.X] = 0; // 可以不用清0
+    updateDistance(chess, piece);
 }
