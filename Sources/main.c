@@ -3,7 +3,8 @@
 #include <windows.h>
 
 int main(void) {
-    
+    int a;
+    scanf("%d", &a);
     for (int i = 0; i < 1; i++) {
 
         Game* game = newGame(BLACK, WHITE);

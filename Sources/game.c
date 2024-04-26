@@ -1,5 +1,6 @@
 #include "../Headers/game.h"
 #include <windows.h>
+#include <conio.h>
 
 Game* newGame(Piece myPiece, Piece enemyPiece) {
     Game* game = (Game*)malloc(sizeof(Game));
@@ -19,15 +20,18 @@ Piece swapPlayer(Piece player) {
 }
 
 int calcWeight(Game* game, Piece piece, Point position) {
+    int multiplying = 50;
+    int floodMut = multiplying * (0.05);
+
     int liveBonusME = testLiveHelperFunc(&game->chess, piece, position);
     int liveBonusENEMY = testLiveHelperFunc(&game->chess, swapPlayer(piece), position);
     return 
         (
             (game->chess.distanceMaps[piece][position.Y][position.X]) * liveBonusME +
             (game->chess.distanceMaps[swapPlayer(piece)][position.Y][position.X]) * liveBonusENEMY
-        ) * 50
+        ) * multiplying
         +
-        game->chess.floodMap[position.Y][position.X] * 5;
+        game->chess.floodMap[position.Y][position.X] * floodMut;
 }
 
 bool tryPutPiece(Game* game, Piece player, Point position) {
@@ -116,10 +120,10 @@ Piece startGame(Game* game) {
         currentPlayer = swapPlayer(currentPlayer);
         moveCount++;
 
-        sleep(1);
-
-        printf("[target: (%d, %d)]==================================\n", move.X, move.Y);
         displayChess(&game->chess);
+        sleep(1);
+        // printf("[target: (%d, %d)]==================================\n", move.X, move.Y);
+        system("cls");
     }
 
     return EMPTY;

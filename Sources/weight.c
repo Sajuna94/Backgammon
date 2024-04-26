@@ -15,31 +15,39 @@ int testLiveHelperFunc(Chess* chess, Piece piece, Point position) {
 
         LiveHelper liveResult = { .length = liveA.length + liveB.length, .IS_LIVE = liveA.IS_LIVE && liveB.IS_LIVE };
 
-        if (liveResult.length >= 4) {
+        if (liveResult.length >= 3) {
             if (liveResult.IS_LIVE)
                 LIVE_4 = true;
-            else
+            if (liveA.IS_LIVE || liveB.IS_LIVE)
                 DIE_4 = true;
-        } else if (liveResult.length == 3) {
+        } else if (liveResult.length == 2) {
             if (liveResult.IS_LIVE)
                 LIVE_3 = true;
-            else
+            if (liveA.IS_LIVE || liveB.IS_LIVE)
                 DIE_3 = true;
         }
     }
 
+    int total = 1;
+    int combo = 1;
+
     if (LIVE_4) {
-        return 40;
+        // printf("live4");
+        total += 20 * combo++;
     }
     if (LIVE_3) {
-        return 35;
+        // printf("live3");
+        total +=  10 * combo++;
     }
     if (DIE_4) {
-        return 20;
+        // printf("die4");
+        total +=  2 * combo++;
     }
     if (DIE_3) {
+        // printf("die3");
+        total += 1 * combo++;
     }
-    return 10;
+    return total;
 }
 
 LiveHelper* LiveDFS(Chess* chess, Piece piece, Point dirPt, int x, int y, LiveHelper* liveHelper) {
