@@ -6,6 +6,7 @@
     "files.associations": {
         "game.h": "c",
         "chess.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "point.h": "c"
     }
 }

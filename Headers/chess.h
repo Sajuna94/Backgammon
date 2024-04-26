@@ -20,6 +20,7 @@ typedef struct Chess
     Piece board[BOARD_SIZE][BOARD_SIZE];
 
     int distanceMaps[2][BOARD_SIZE][BOARD_SIZE];
+    int floodMap[BOARD_SIZE][BOARD_SIZE];
 } Chess;
 
 

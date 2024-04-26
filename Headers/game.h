@@ -8,6 +8,7 @@
 
 #include "../Tools/point.h"
 #include "chess.h"
+#include "weight.h"
 
 typedef struct {
     int x, y;
@@ -22,6 +23,7 @@ typedef struct Game
     Piece me, enemy;
     Chess chess;
 } Game;
+
 
 Game* newGame(Piece myPiece, Piece enemyPiece);
 Piece startGame(Game* game);

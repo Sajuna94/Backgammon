@@ -1,4 +1,5 @@
 #include "../Headers/game.h"
+#include <windows.h>
 
 Game* newGame(Piece myPiece, Piece enemyPiece) {
     Game* game = (Game*)malloc(sizeof(Game));
@@ -13,8 +14,20 @@ Game* newGame(Piece myPiece, Piece enemyPiece) {
     return game;
 }
 
-void swapPlayer(Piece* player) {
-    *player = (*player == BLACK) ? WHITE : BLACK;
+Piece swapPlayer(Piece player) {
+    return (player == BLACK) ? WHITE : BLACK;
+}
+
+int calcWeight(Game* game, Piece piece, Point position) {
+    int liveBonusME = testLiveHelperFunc(&game->chess, piece, position);
+    int liveBonusENEMY = testLiveHelperFunc(&game->chess, swapPlayer(piece), position);
+    return 
+        (
+            (game->chess.distanceMaps[piece][position.Y][position.X]) * liveBonusME +
+            (game->chess.distanceMaps[swapPlayer(piece)][position.Y][position.X]) * liveBonusENEMY
+        ) * 50
+        +
+        game->chess.floodMap[position.Y][position.X] * 5;
 }
 
 bool tryPutPiece(Game* game, Piece player, Point position) {
@@ -40,14 +53,38 @@ bool tryPutPiece(Game* game, Piece player, Point position) {
     return true;
 }
 
-Point getNextMove(Game* game) {
+Point getNextMove(Game* game, Piece piece) {
     // TODO: 取得下棋位置
-    return newPoint(rand() % BOARD_SIZE, rand() % BOARD_SIZE);
+    Chess* chess = &game->chess;
+    Point targetPoint = { .X = rand() % BOARD_SIZE, .Y = rand() % BOARD_SIZE };
+
+    int maxWeight = 0;
+    for (int y = 0; y < BOARD_SIZE; y++)
+        for (int x = 0; x < BOARD_SIZE; x++) {
+            if (chess->board[y][x] != EMPTY)
+                continue;
+
+            int weight = calcWeight(game, piece, newPoint(x, y)) + rand() % BOARD_SIZE;
+
+            if (chess->distanceMaps[swapPlayer(piece)][y][x] >= 4)
+                weight = 2147483647 - 1;
+            if (chess->distanceMaps[piece][y][x] >= 4)
+                weight = 2147483647;
+
+            if (weight > maxWeight) {
+                targetPoint.X = x;
+                targetPoint.Y=  y;
+                maxWeight = weight;
+            }
+        }
+
+    return targetPoint;
 }
 
 Piece startGame(Game* game) {
     srand(time(NULL));
-    int maxMoves = BOARD_SIZE * BOARD_SIZE - 40, moveCount = 0;
+
+    int maxMoves = BOARD_SIZE * BOARD_SIZE, moveCount = 0;
 
     Piece currentPlayer = BLACK;
 
@@ -57,15 +94,17 @@ Piece startGame(Game* game) {
 
         if (currentPlayer == game->enemy) {
             // TODO: 取得對方下棋位置
-            move = newPoint(rand() % BOARD_SIZE, rand() % BOARD_SIZE);
+            // move = newPoint(rand() % BOARD_SIZE, rand() % BOARD_SIZE);
+            move = getNextMove(game, game->enemy);
         }
         else if (currentPlayer == game->me) {
-            move = getNextMove(game);
+            move = getNextMove(game, game->me);
         }
 
         if (!tryPutPiece(game, currentPlayer, move)) {
             // TODO: 下棋失敗處理 (可能不用做)
-            continue;
+            printf("%s trying put (%d, %d)\n", (currentPlayer == BLACK) ? "BlACK(X)":"WHITE(O)", move.X, move.Y);
+            break;;
         }
 
         if (checkWin(&game->chess, currentPlayer, move)) {
@@ -74,8 +113,13 @@ Piece startGame(Game* game) {
             return currentPlayer;
         }
 
-        swapPlayer(&currentPlayer);
+        currentPlayer = swapPlayer(currentPlayer);
         moveCount++;
+
+        sleep(1);
+
+        printf("[target: (%d, %d)]==================================\n", move.X, move.Y);
+        displayChess(&game->chess);
     }
 
     return EMPTY;

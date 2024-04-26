@@ -9,10 +9,6 @@ typedef struct {
     int player;
 } Coordinate;
 
-typedef struct {
-    
-} Chess;
-
 
 
 
