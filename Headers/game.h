@@ -6,6 +6,10 @@
 #include <stdbool.h>
 #include <time.h>
 
+#include <windows.h>
+#include <conio.h>
+#include <limits.h>
+
 #include "../Tools/point.h"
 #include "chess.h"
 #include "weight.h"

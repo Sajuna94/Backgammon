@@ -22,7 +22,7 @@ typedef struct
     bool IS_LIVE;
 } LiveHelper;
 
-int testLiveHelperFunc(Chess* chess, Piece piece, Point position);
+int calcLiveWeight(Chess* chess, Piece piece, Point position);
 
 LiveHelper* LiveDFS(Chess* chess, Piece piece, Point dirPt, int x, int y, LiveHelper* liveHelper);
 

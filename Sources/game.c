@@ -1,6 +1,5 @@
 #include "../Headers/game.h"
-#include <windows.h>
-#include <conio.h>
+
 
 Game* newGame(Piece myPiece, Piece enemyPiece) {
     Game* game = (Game*)malloc(sizeof(Game));
@@ -23,8 +22,8 @@ int calcWeight(Game* game, Piece piece, Point position) {
     int multiplying = 50;
     int floodMut = multiplying * (0.05);
 
-    int liveBonusME = testLiveHelperFunc(&game->chess, piece, position);
-    int liveBonusENEMY = testLiveHelperFunc(&game->chess, swapPlayer(piece), position);
+    int liveBonusME = calcLiveWeight(&game->chess, piece, position);
+    int liveBonusENEMY = calcLiveWeight(&game->chess, swapPlayer(piece), position);
     return 
         (
             (game->chess.distanceMaps[piece][position.Y][position.X]) * liveBonusME +
@@ -71,9 +70,9 @@ Point getNextMove(Game* game, Piece piece) {
             int weight = calcWeight(game, piece, newPoint(x, y)) + rand() % BOARD_SIZE;
 
             if (chess->distanceMaps[swapPlayer(piece)][y][x] >= 4)
-                weight = 2147483647 - 1;
+                weight = INT_MAX - 1;
             if (chess->distanceMaps[piece][y][x] >= 4)
-                weight = 2147483647;
+                weight = INT_MAX;
 
             if (weight > maxWeight) {
                 targetPoint.X = x;
@@ -81,7 +80,6 @@ Point getNextMove(Game* game, Piece piece) {
                 maxWeight = weight;
             }
         }
-
     return targetPoint;
 }
 
@@ -120,9 +118,10 @@ Piece startGame(Game* game) {
         currentPlayer = swapPlayer(currentPlayer);
         moveCount++;
 
+        // print data
         displayChess(&game->chess);
+        printf("[%d] %s target: (%d, %d)\n",moveCount, (currentPlayer == BLACK) ? "BlACK(X)":"WHITE(O)", move.X, move.Y);
         sleep(1);
-        // printf("[target: (%d, %d)]==================================\n", move.X, move.Y);
         system("cls");
     }
 
